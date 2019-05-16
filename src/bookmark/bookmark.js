@@ -1,5 +1,6 @@
 import React from 'react';
 import './bookmark.css';
+import {Link} from 'react-router-dom'
 
 import Rating from '../rating/rating';
 
@@ -16,6 +17,7 @@ export default function Bookmark(props) {
             </a>
         </div>
         <Rating value={props.rating}/>
+        <Link to={`/bookmarks/${props.id}`}>Edit</Link>
       </div>      
       <div className="bookmark__description">
         {props.description}

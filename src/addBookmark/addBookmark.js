@@ -1,7 +1,9 @@
 import React, { Component } from  'react';
+import {Link} from 'react-router-dom'
+import config from '../config'
 import './addBookmark.css';
 
-const API_KEY = '$2a$10$gLfjz6ka3VodRrognEOV5.deyISScrJSHp44JBU.sDrfQW8GTAQau'
+const API_KEY = "Bearer apiToken123"
 
 class AddBookmark extends Component {
   constructor(props){
@@ -11,7 +13,8 @@ class AddBookmark extends Component {
       title: '', 
       url: '', 
       description: '', 
-      rating: 1
+      rating: 1,
+      id: null
     }
   }
 
@@ -37,23 +40,25 @@ class AddBookmark extends Component {
 
 
   updateRating(rating){
+    let numRating = parseInt(rating)
     this.setState({
-      rating
+      rating: numRating
     })
   }
 
   
 
   handleSubmit(e){
+    console.log('submit')
     e.preventDefault(); 
     const bookmark = (({title, url, description, rating}) => ({title, url, description, rating}))(this.state);
-    const url = 'https://tf-ed-bookmarks-api.herokuapp.com/v3/bookmarks'
+    const url = `${config.API_ENDPOINT}`
     const options = {
       method: 'POST', 
       body: JSON.stringify(bookmark), 
       headers: {
         'Content-Type': 'application/json', 
-        'Authorization': `Bearer ${API_KEY}`
+        'Authorization': API_KEY
       }
     }
 
@@ -71,7 +76,6 @@ class AddBookmark extends Component {
         description: '', 
         rating: 1
       })
-      this.props.handleAdd(bookmark)
     })
     .catch(err => {
       this.setState({
@@ -88,7 +92,7 @@ class AddBookmark extends Component {
     return (
       <div className="addbookmark">
         <h2>Add Bookmark</h2>
-        <form className="addbookmark__form">
+        <form className="addbookmark__form" onSubmit={e=>this.handleSubmit(e)}>
           <label htmlFor="title">Title:</label>
           <input type="text" 
           name="title" 
@@ -126,7 +130,7 @@ class AddBookmark extends Component {
             />
 
           <div className="addbookmark__buttons">
-            <button onClick={e => this.props.showForm(false)}>Cancel</button>
+            <Link to='/'><button>Cancel</button></Link>
             <button type="submit"> Save</button>
           </div>  
         </form>
